@@ -1,0 +1,497 @@
+{
+	"info": {
+		"_postman_id": "bioskop-api-collection",
+		"name": "Bioskop Online API",
+		"description": "API Collection untuk Platform Pembelian Tiket Bioskop Online",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"token\", jsonData.token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@bioskop.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Movies",
+			"item": [
+				{
+					"name": "Get All Movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/movies",
+							"host": ["{{base_url}}"],
+							"path": ["movies"]
+						}
+					}
+				},
+				{
+					"name": "Get Movie by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/movies/1",
+							"host": ["{{base_url}}"],
+							"path": ["movies", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Movie (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"New Movie\",\n  \"genre\": \"Action\",\n  \"duration\": 120,\n  \"synopsis\": \"This is a new movie synopsis\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/movies",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "movies"]
+						}
+					}
+				},
+				{
+					"name": "Update Movie (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Movie Title\",\n  \"genre\": \"Drama\",\n  \"duration\": 130\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/movies/1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "movies", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Movie (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/movies/1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "movies", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Schedule (Jadwal Tayang)",
+			"item": [
+				{
+					"name": "Get All Schedules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/schedule",
+							"host": ["{{base_url}}"],
+							"path": ["schedule"]
+						}
+					}
+				},
+				{
+					"name": "Get Schedules by City",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/schedule?city=Jakarta",
+							"host": ["{{base_url}}"],
+							"path": ["schedule"],
+							"query": [
+								{
+									"key": "city",
+									"value": "Jakarta"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Schedules by Movie ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/schedule?movie_id=1",
+							"host": ["{{base_url}}"],
+							"path": ["schedule"],
+							"query": [
+								{
+									"key": "movie_id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Schedule by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/schedule/1",
+							"host": ["{{base_url}}"],
+							"path": ["schedule", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Schedule (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"movie_id\": 1,\n  \"branch_id\": 1,\n  \"studio\": \"Studio 1\",\n  \"show_time\": \"2024-12-25T19:00:00Z\",\n  \"seats_total\": 50,\n  \"seats_left\": 50,\n  \"price\": 50000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/schedule",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "schedule"]
+						}
+					}
+				},
+				{
+					"name": "Update Schedule (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"price\": 55000,\n  \"seats_total\": 60\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/schedule/1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "schedule", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Schedule (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/schedule/1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "schedule", "1"]
+						}
+					}
+				},
+				{
+					"name": "Cancel Showtime (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"reason\": \"Kendala teknis dari pihak bioskop\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/schedule/1/cancel",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "schedule", "1", "cancel"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "Create Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"showtime_id\": 1,\n  \"seats\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/book",
+							"host": ["{{base_url}}"],
+							"path": ["book"]
+						}
+					}
+				},
+				{
+					"name": "Get My Bookings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/my-bookings",
+							"host": ["{{base_url}}"],
+							"path": ["my-bookings"]
+						}
+					}
+				},
+				{
+					"name": "Complete Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/payment/1",
+							"host": ["{{base_url}}"],
+							"path": ["payment", "1"]
+						}
+					}
+				},
+				{
+					"name": "Cancel Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/payment/failed/1",
+							"host": ["{{base_url}}"],
+							"path": ["payment", "failed", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Branches",
+			"item": [
+				{
+					"name": "Get All Branches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/branches",
+							"host": ["{{base_url}}"],
+							"path": ["branches"]
+						}
+					}
+				},
+				{
+					"name": "Get Branches by City",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/branches?city=Jakarta",
+							"host": ["{{base_url}}"],
+							"path": ["branches"],
+							"query": [
+								{
+									"key": "city",
+									"value": "Jakarta"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin - Refund",
+			"item": [
+				{
+					"name": "Refund Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"reason\": \"Refund dari pihak bioskop\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/refund/1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "refund", "1"]
+						}
+					}
+				},
+				{
+					"name": "Get All Refunds",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/refunds",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "refunds"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:4000"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
+
