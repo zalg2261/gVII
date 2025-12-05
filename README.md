@@ -1,7 +1,7 @@
 Jessica Giovanna Chandra
 
 ## 🔗 Repository
-**GitHub:** [Link Repository GitHub Anda] *(Update setelah push ke GitHub)*
+**GitHub:** https://github.com/zalg2261/gVII
 
 ## Deskripsi Proyek
 
